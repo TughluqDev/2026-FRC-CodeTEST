@@ -14,6 +14,7 @@ import com.ctre.phoenix6.swerve.SwerveRequest;
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -111,6 +112,7 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
 
     /* The SysId routine to test */
     private SysIdRoutine m_sysIdRoutineToApply = m_sysIdRoutineTranslation;
+    private final SwerveRequest.ApplyChassisSpeeds m_pathPlannerRequest = new SwerveRequest.ApplyChassisSpeeds();
 
     /**
      * Constructs a CTRE SwerveDrivetrain using the specified constants.
@@ -196,6 +198,22 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
      */
     public Command applyRequest(Supplier<SwerveRequest> request) {
         return run(() -> this.setControl(request.get()));
+    }
+
+    public Pose2d getPose() {
+        return getState().Pose;
+    }
+
+    public void resetPose(Pose2d pose) {
+        super.resetPose(pose);
+    }
+
+    public ChassisSpeeds getRobotRelativeSpeeds() {
+        return getState().Speeds;
+    }
+
+    public void driveRobotRelative(ChassisSpeeds speeds) {
+        setControl(m_pathPlannerRequest.withSpeeds(speeds));
     }
 
     /**
