@@ -46,12 +46,21 @@ public class LimeLightSubsystem extends SubsystemBase {
       return botPose;
 
   }
+  public Pose2d getBotPoseRightWpiBlue() {
+    var est = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2("limelight-right");
+    if (est != null && LimelightHelpers.validPoseEstimate(est)) {
+      return est.pose;
+    }
+    return LimelightHelpers.getBotPose2d_wpiBlue("limelight-right");
+  }
 
-  public Pose2d getRobotRelativeTargetPose(){
-    double[] targetPoseArray = m_limeLightRightTable.getEntry("targetpose_robotspace").getDoubleArray(new double[10]);
-    Pose2d targetPose = new Pose2d(targetPoseArray[2], targetPoseArray[0], Rotation2d.fromDegrees(targetPoseArray[4])); 
-
-    return targetPose;
+  public Pose2d getRobotRelativeTargetPose() {
+    double[] targetPoseArray =
+        m_limeLightRightTable.getEntry("targetpose_robotspace").getDoubleArray(new double[10]);
+    return new Pose2d(
+        targetPoseArray[2],
+        targetPoseArray[0],
+        Rotation2d.fromDegrees(targetPoseArray[4]));
   }
 
   public int getRightID(){
